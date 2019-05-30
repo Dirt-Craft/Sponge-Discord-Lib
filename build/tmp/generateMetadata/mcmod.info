@@ -1,0 +1,18 @@
+[
+    {
+        "modid": "sponge-discord-lib",
+        "name": "Sponge Discord Lib",
+        "version": "unspecified",
+        "description": "Sponge plugin made to manage every interaction with Discord.",
+        "url": "https://dirtcraft.net/",
+        "authorList": [
+            "juliann"
+        ],
+        "dependencies": [
+            "spongeapi@7.1.0-SNAPSHOT"
+        ],
+        "requiredMods": [
+            "spongeapi@7.1.0-SNAPSHOT"
+        ]
+    }
+]

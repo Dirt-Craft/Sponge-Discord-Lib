@@ -18,20 +18,23 @@ import javax.security.auth.login.LoginException;
 )
 public class SpongeDiscordLib {
 
+
+    private static boolean hasInitialized = false;
+
     private static JDA jda;
 
-    public static void initJDA(String token) {
+    public static void initJDA(String token) throws InterruptedException, LoginException {
 
-        try {
-
-            jda = new JDABuilder(token)
-                    .build()
-                    .awaitReady();
-
-        } catch (LoginException | InterruptedException exception) {
-            exception.printStackTrace();
-
+        if (hasInitialized) {
+            throw new InterruptedException("JDA has already been initialized!");
         }
+
+
+        jda = new JDABuilder(token)
+                .build()
+                .awaitReady();
+
+        hasInitialized = true;
 
     }
 

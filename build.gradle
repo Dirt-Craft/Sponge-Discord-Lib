@@ -19,7 +19,7 @@ dependencies {
     compile ('net.dv8tion:JDA:3.8.3_463')
 }
 
-jar.enabled = false
+jar.enabled = true
 
 build.dependsOn shadowJar
 

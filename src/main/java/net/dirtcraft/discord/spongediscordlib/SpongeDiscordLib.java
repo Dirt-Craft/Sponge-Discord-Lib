@@ -3,7 +3,6 @@ package net.dirtcraft.discord.spongediscordlib;
 import com.google.inject.Inject;
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfigManager;
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfiguration;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -21,6 +20,7 @@ import javax.security.auth.login.LoginException;
         name = "Sponge Discord Lib",
         description = "Sponge plugin made to manage every interaction with Discord.",
         url = "https://dirtcraft.net/",
+        version = "1.0.0",
         authors = {
                 "juliann"
         }
@@ -72,7 +72,4 @@ public class SpongeDiscordLib {
         return DiscordConfiguration.Discord.SERVER_NAME;
     }
 
-    public static EmbedBuilder embedBuilder() {
-        return new EmbedBuilder();
-    }
 }

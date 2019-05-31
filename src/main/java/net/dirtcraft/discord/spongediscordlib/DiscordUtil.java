@@ -1,18 +1,11 @@
 package net.dirtcraft.discord.spongediscordlib;
 
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Game;
 
 public class DiscordUtil {
 
     private static JDA jda = SpongeDiscordLib.getJDA();
-
-    private static EmbedBuilder embedBuilder = new EmbedBuilder();
-
-    public static EmbedBuilder getEmbedBuilder() {
-        return embedBuilder;
-    }
 
     public static void setStatus(Game.GameType type, String name, String url) {
         if (type.equals(Game.GameType.DEFAULT)) {

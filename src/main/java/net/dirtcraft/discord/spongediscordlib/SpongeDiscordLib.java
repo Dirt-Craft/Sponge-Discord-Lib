@@ -5,7 +5,6 @@ import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfigManager
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfiguration;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.DefaultConfig;
@@ -39,6 +38,11 @@ public class SpongeDiscordLib {
     @Listener(order = Order.FIRST)
     public void onPreInit(GamePreInitializationEvent event) {
         this.cfgManager = new DiscordConfigManager(loader);
+        try {
+            initJDA();
+        } catch (LoginException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public static void initJDA() throws InterruptedException, LoginException {
@@ -52,48 +56,6 @@ public class SpongeDiscordLib {
                 .awaitReady();
 
         hasInitialized = true;
-
-    }
-
-    public static void setStatus(Game.GameType type, String name, String url) {
-
-
-        if (type.equals(Game.GameType.DEFAULT)) {
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, name, ""));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, name));
-            }
-            return;
-        }
-
-        if (type.equals(Game.GameType.LISTENING)) {
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.LISTENING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.LISTENING, name));
-            }
-            return;
-        }
-
-        if (type.equals(Game.GameType.WATCHING)) {
-
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.WATCHING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.WATCHING, name));
-            }
-            return;
-        }
-
-        if (type.equals(Game.GameType.STREAMING)) {
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.STREAMING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.STREAMING, name));
-            }
-            return;
-        }
 
     }
 

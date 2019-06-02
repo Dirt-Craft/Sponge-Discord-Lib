@@ -8,7 +8,7 @@ configurations {
 }
 
 group = pluginGroup
-//version = pluginVersion - REMOVE THE VERSION FOR THE JAR NAME
+//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME
 
 repositories {
     jcenter()
@@ -16,9 +16,7 @@ repositories {
 
 dependencies {
     shadow 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    compile ('net.dv8tion:JDA:3.8.3_463') {
-        exclude module: 'opus-java'
-    }
+    compile 'net.dv8tion:JDA:3.8.3_463'
 }
 
 jar.enabled = true

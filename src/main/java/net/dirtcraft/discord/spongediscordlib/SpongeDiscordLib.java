@@ -46,7 +46,7 @@ public class SpongeDiscordLib {
         }
     }
 
-    public static void initJDA() throws InterruptedException, LoginException {
+    private void initJDA() throws InterruptedException, LoginException {
 
         if (hasInitialized) {
             throw new InterruptedException("JDA has already been initialized!");

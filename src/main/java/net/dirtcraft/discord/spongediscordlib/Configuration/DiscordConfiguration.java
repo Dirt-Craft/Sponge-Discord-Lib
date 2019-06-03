@@ -11,11 +11,15 @@ public class DiscordConfiguration {
 
     @ConfigSerializable
     public static class Discord {
-        @Setting(value = "Discord Bot Token")
-        public static String TOKEN = "";
+
+        @Setting(value = "Gamechat Channel ID")
+        public static String GAMECHAT_CHANNEL_ID = "";
 
         @Setting(value = "Server Name")
-        public static String SERVER_NAME = "Set my name in Config!";
+        public static String SERVER_NAME = "N/A";
+
+        @Setting(value = "Discord Bot Token")
+        public static String TOKEN = "";
     }
 
 }

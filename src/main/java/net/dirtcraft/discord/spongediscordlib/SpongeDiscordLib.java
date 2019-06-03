@@ -68,6 +68,10 @@ public class SpongeDiscordLib {
         return DiscordConfiguration.Discord.TOKEN;
     }
 
+    public static String getGamechatChannelID() {
+        return DiscordConfiguration.Discord.GAMECHAT_CHANNEL_ID;
+    }
+
     public static String getServerName() {
         return DiscordConfiguration.Discord.SERVER_NAME;
     }

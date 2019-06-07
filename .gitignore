@@ -1,7 +1,3 @@
-
-# Created by https://www.gitignore.io/api/java,gradle
-# Edit at https://www.gitignore.io/?templates=java,gradle
-
 ### Java ###
 # Compiled class file
 *.class
@@ -46,5 +42,3 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
-
-# End of https://www.gitignore.io/api/java,gradle

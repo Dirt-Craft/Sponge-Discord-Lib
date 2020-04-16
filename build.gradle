@@ -10,7 +10,7 @@ configurations {
 }
 
 group = pluginGroup
-//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME
+//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME //
 
 repositories {
     jcenter()

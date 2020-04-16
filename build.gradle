@@ -13,6 +13,7 @@ group = pluginGroup
 //version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME
 
 repositories {
+    maven { url 'https://jitpack.io' }
     jcenter()
 }
 

@@ -10,6 +10,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -36,8 +37,8 @@ public class SpongeDiscordLib {
 
     private static JDA jda;
 
-    @Listener(order = Order.FIRST)
-    public void onPreInit(GamePreInitializationEvent event) {
+    @Listener(order = Order.PRE)
+    public void onPreInit(GameConstructionEvent event) {
         this.cfgManager = new DiscordConfigManager(loader);
         try {
             initJDA();

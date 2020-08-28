@@ -1,7 +1,13 @@
 package net.dirtcraft.discord.spongediscordlib;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Game;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DiscordUtil {
 

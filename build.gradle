@@ -3,17 +3,15 @@ plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
     id 'java'
 }
-apply plugin: 'maven'
 
 configurations {
     compile.extendsFrom shadow
 }
 
 group = pluginGroup
-//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME//
+//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME
 
 repositories {
-    maven { url 'https://jitpack.io' }
     jcenter()
 }
 

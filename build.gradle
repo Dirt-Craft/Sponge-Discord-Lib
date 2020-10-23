@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    shadow 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
+    shadow 'org.spongepowered:spongeapi:5.2.0-SNAPSHOT'
     compile ('net.dv8tion:JDA:3.8.3_463') {
         exclude module: 'opus-java'
     }

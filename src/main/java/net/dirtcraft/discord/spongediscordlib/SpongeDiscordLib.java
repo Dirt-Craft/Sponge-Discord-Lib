@@ -24,7 +24,8 @@ import java.util.concurrent.CompletableFuture;
         url = "https://dirtcraft.net/",
         version = "1.0.0",
         authors = {
-                "juliann"
+                "juliann",
+                "ShinyAfro"
         }
 )
 public class SpongeDiscordLib {

@@ -27,7 +27,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_168" level="project" />
-    <orderEntry type="library" name="Gradle: org.spongepowered:spongeapi:7.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.spongepowered:spongeapi:7.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
@@ -38,10 +38,10 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.10.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.inject:guice:4.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.spongepowered:plugin-meta:0.4.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-hocon:3.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-gson:3.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-yaml:3.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-core:3.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-hocon:3.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-gson:3.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-yaml:3.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.spongepowered:configurate-core:3.6.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.0.15" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.0" level="project" />

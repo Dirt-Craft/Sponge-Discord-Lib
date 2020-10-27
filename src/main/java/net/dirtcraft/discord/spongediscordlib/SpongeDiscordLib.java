@@ -3,8 +3,8 @@ package net.dirtcraft.discord.spongediscordlib;
 import com.google.inject.Inject;
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfigManager;
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfiguration;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.DefaultConfig;
@@ -52,7 +52,7 @@ public class SpongeDiscordLib {
             throw new InterruptedException("JDA has already been initialized!");
         }
 
-        jda = new JDABuilder(DiscordConfiguration.Discord.TOKEN)
+        jda = JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN)
                 .build()
                 .awaitReady();
 

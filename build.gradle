@@ -5,7 +5,7 @@ plugins {
 }
 
 configurations {
-    shadow.extendsFrom(compile)
+    compile.extendsFrom shadow
 }
 
 group = pluginGroup
@@ -16,9 +16,9 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libraries', include: '*.jar')
-    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    shadow ('net.dv8tion:JDA:4.2.0_168') {
+    shadow fileTree(dir: 'libraries', include: '*.jar')
+    shadow 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
+    compile ('net.dv8tion:JDA:4.2.0_168') {
         exclude module: 'opus-java'
     }
 }
@@ -29,7 +29,7 @@ build.dependsOn shadowJar
 
 shadowJar {
     classifier = null
-    configurations = [project.configurations.shadow]
+    configurations = [project.configurations.compile]
 
     relocate('org.json', 'net.dirtcraft.org.shaded.json')
     relocate('org.apache', 'net.dirtcraft.org.shaded.apache')

@@ -57,7 +57,7 @@ public class SpongeDiscordLib {
             throw new InterruptedException("JDA has already been initialized!");
         }
 
-        JDABuilder.createLight(DiscordConfiguration.Discord.TOKEN)
+        jda = JDABuilder.createLight(DiscordConfiguration.Discord.TOKEN)
                 .build()
                 .awaitReady();
         hasInitialized = true;

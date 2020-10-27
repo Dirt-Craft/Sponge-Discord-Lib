@@ -1,55 +1,18 @@
 package net.dirtcraft.discord.spongediscordlib;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Game;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 
 public class DiscordUtil {
 
     private static JDA jda = SpongeDiscordLib.getJDA();
 
-    public static void setStatus(Game.GameType type, String name, String url) {
-        if (type.equals(Game.GameType.DEFAULT)) {
+    public static void setStatus(Activity.ActivityType type, String name, String url) {
             if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, name, url));
+                jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.of(type, name, url));
             } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, name));
+                jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.of(type, name));
             }
-            return;
         }
-
-        if (type.equals(Game.GameType.LISTENING)) {
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.LISTENING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.LISTENING, name));
-            }
-            return;
-        }
-
-        if (type.equals(Game.GameType.WATCHING)) {
-
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.WATCHING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.WATCHING, name));
-            }
-            return;
-        }
-
-        if (type.equals(Game.GameType.STREAMING)) {
-            if (url != null) {
-                jda.getPresence().setGame(Game.of(Game.GameType.STREAMING, name, url));
-            } else {
-                jda.getPresence().setGame(Game.of(Game.GameType.STREAMING, name));
-            }
-            return;
-        }
-    }
-
 }

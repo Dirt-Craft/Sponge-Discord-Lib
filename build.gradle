@@ -33,6 +33,7 @@ shadowJar {
 
     relocate('org.json', 'net.dirtcraft.org.shaded.json')
     relocate('org.apache', 'net.dirtcraft.org.shaded.apache')
+    relocate('com.fasterxml', 'net.dirtcraft.org.shaded.fasterxml')
 }
 
 sponge.plugin.id = pluginId

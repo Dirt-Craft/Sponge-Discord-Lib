@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: JDA-3.8.3_463.jar jsr305-3.0.2.jar annotations-16.0.1.jar 
- slf4j-api-1.7.25.jar nv-websocket-client-2.5.jar okhttp-3.13.0.jar co
- mmons-collections4-4.1.jar json-20160810.jar trove4j-3.0.3.jar okio-1
- .17.2.jar
-
+Class-Path: JDA-4.2.0_168.jar jsr305-3.0.2.jar annotations-16.0.1.jar 
+ slf4j-api-1.7.25.jar nv-websocket-client-2.9.jar okhttp-3.13.0.jar co
+ mmons-collections4-4.1.jar trove4j-3.0.3.jar jackson-databind-2.10.1.
+ jar okio-1.17.2.jar jackson-annotations-2.10.1.jar jackson-core-2.10.
+ 1.jar

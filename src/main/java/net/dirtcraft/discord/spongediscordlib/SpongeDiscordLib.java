@@ -17,7 +17,7 @@ import org.spongepowered.api.plugin.Plugin;
 import javax.security.auth.login.LoginException;
 import java.util.concurrent.CompletableFuture;
 
-@Plugin(
+@Plugin( //
         id = "sponge-discord-lib",
         name = "Sponge Discord Lib",
         description = "Sponge plugin made to manage every interaction with Discord.",

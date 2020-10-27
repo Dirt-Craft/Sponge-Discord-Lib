@@ -8,11 +8,8 @@
         "authorList": [
             "juliann"
         ],
-        "dependencies": [
-            "spongeapi@7.1.0-SNAPSHOT"
-        ],
         "requiredMods": [
-            "spongeapi@7.1.0-SNAPSHOT"
+            "spongeapi@5.2.0-SNAPSHOT"
         ]
     }
 ]

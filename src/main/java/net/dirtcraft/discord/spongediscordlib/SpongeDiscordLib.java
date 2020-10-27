@@ -5,15 +5,17 @@ import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfigManager
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfiguration;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import javax.security.auth.login.LoginException;
+import java.util.concurrent.CompletableFuture;
 
 @Plugin(
         id = "sponge-discord-lib",
@@ -36,18 +38,21 @@ public class SpongeDiscordLib {
 
     private static JDA jda;
 
-    @Listener(order = Order.FIRST)
-    public void onPreInit(GamePreInitializationEvent event) {
+    @Listener(order = Order.PRE)
+    public void onPreInit(GameConstructionEvent event) {
+        CompletableFuture<Void> initTimer = null;
         this.cfgManager = new DiscordConfigManager(loader);
         try {
+            initTimer = CompletableFuture.runAsync(this::initJdaConnectTimer);
             initJDA();
         } catch (LoginException | InterruptedException exception) {
             exception.printStackTrace();
+        } finally {
+            if (initTimer != null) initTimer.cancel(true);
         }
     }
 
     private void initJDA() throws InterruptedException, LoginException {
-
         if (hasInitialized) {
             throw new InterruptedException("JDA has already been initialized!");
         }
@@ -55,9 +60,7 @@ public class SpongeDiscordLib {
         jda = JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN)
                 .build()
                 .awaitReady();
-
         hasInitialized = true;
-
     }
 
     public static JDA getJDA() {
@@ -74,6 +77,20 @@ public class SpongeDiscordLib {
 
     public static String getServerName() {
         return DiscordConfiguration.Discord.SERVER_NAME;
+    }
+
+    private void initJdaConnectTimer(){
+        int n = 0;
+        try {
+            while (jda == null) {
+                Thread.sleep(1000);
+                System.out.println("JDA has taken " + ++n + " second(s) to initialize.");
+                if (n > 300){
+                    System.out.println("Rebooting server automatically due to JDA initialization failure.");
+                    FMLCommonHandler.instance().exitJava(-1, true);
+                }
+            }
+        } catch (InterruptedException ignored){ }
     }
 
 }

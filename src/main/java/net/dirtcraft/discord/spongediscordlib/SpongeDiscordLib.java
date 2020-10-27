@@ -85,7 +85,7 @@ public class SpongeDiscordLib {
             while (jda == null) {
                 Thread.sleep(1000);
                 System.out.println("JDA has taken " + ++n + " second(s) to initialize.");
-                if (n > 60){
+                if (n > 300){
                     System.out.println("Rebooting server automatically due to JDA initialization failure.");
                     FMLCommonHandler.instance().exitJava(-1, true);
                 }

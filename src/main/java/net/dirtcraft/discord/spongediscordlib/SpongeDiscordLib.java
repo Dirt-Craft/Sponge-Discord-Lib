@@ -5,7 +5,8 @@ import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfigManager
 import net.dirtcraft.discord.spongediscordlib.Configuration.DiscordConfiguration;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.config.DefaultConfig;
@@ -15,6 +16,8 @@ import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import javax.security.auth.login.LoginException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 @Plugin(
@@ -33,39 +36,48 @@ public class SpongeDiscordLib {
     @Inject
     @DefaultConfig(sharedRoot = true)
     private ConfigurationLoader<CommentedConfigurationNode> loader;
-    private DiscordConfigManager cfgManager;
 
-    private static boolean hasInitialized = false;
-
-    private static JDA jda;
+    private static long startTime = System.currentTimeMillis();
+    private static CompletableFuture<JDA> jda;
 
     @Listener(order = Order.PRE)
     public void onPreInit(GameConstructionEvent event) {
-        CompletableFuture<Void> initTimer = null;
-        this.cfgManager = new DiscordConfigManager(loader);
-        try {
-            initTimer = CompletableFuture.runAsync(this::initJdaConnectTimer);
-            initJDA();
-        } catch (LoginException | InterruptedException exception) {
-            exception.printStackTrace();
-        } finally {
-            if (initTimer != null) initTimer.cancel(true);
-        }
+        new DiscordConfigManager(loader);
+        jda = CompletableFuture.supplyAsync(this::initJDA);
     }
 
-    private void initJDA() throws InterruptedException, LoginException {
-        if (hasInitialized) {
-            throw new InterruptedException("JDA has already been initialized!");
+    private JDA initJDA() {
+        if (jda.getNow(null) != null) return jda.join();
+        JDA jda;
+        try {
+            Collection<GatewayIntent> intents = Arrays.asList(
+                    GatewayIntent.GUILD_MEMBERS,
+                    GatewayIntent.GUILD_MESSAGES,
+                    GatewayIntent.DIRECT_MESSAGES
+            );
+            jda = JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN, intents)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .build();
+            return jda.awaitReady();
+        } catch (LoginException | InterruptedException e){
+            e.printStackTrace();
+            return null;
         }
-
-        jda = JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN)
-                .build()
-                .awaitReady();
-        hasInitialized = true;
     }
 
     public static JDA getJDA() {
-        return jda;
+        while (!jda.isDone() && !initTimeExceeded()){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) { }
+        }
+        return jda.join();
+    }
+
+    private static boolean initTimeExceeded(){
+        final long SECOND = 1000;
+        final long MINUTE = SECOND * 60;
+        return startTime - System.currentTimeMillis() > 5 * MINUTE;
     }
 
     public static String getBotToken() {
@@ -78,20 +90,6 @@ public class SpongeDiscordLib {
 
     public static String getServerName() {
         return DiscordConfiguration.Discord.SERVER_NAME;
-    }
-
-    private void initJdaConnectTimer(){
-        int n = 0;
-        try {
-            while (jda == null) {
-                Thread.sleep(1000);
-                System.out.println("JDA has taken " + ++n + " second(s) to initialize.");
-                if (n > 300){
-                    System.out.println("Rebooting server automatically due to JDA initialization failure.");
-                    FMLCommonHandler.instance().exitJava(-1, true);
-                }
-            }
-        } catch (InterruptedException ignored){ }
     }
 
 }

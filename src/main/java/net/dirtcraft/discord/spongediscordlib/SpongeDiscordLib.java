@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.slf4j.Logger;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
@@ -33,10 +34,12 @@ import java.util.concurrent.CompletableFuture;
 )
 public class SpongeDiscordLib {
 
-    @Inject
-    @DefaultConfig(sharedRoot = true)
-    private ConfigurationLoader<CommentedConfigurationNode> loader;
 
+    @DefaultConfig(sharedRoot = true)
+    @Inject private ConfigurationLoader<CommentedConfigurationNode> loader;
+    @Inject private Logger logger;
+
+    private static SpongeDiscordLib instance;
     private static long startTime = System.currentTimeMillis();
     private static CompletableFuture<JDA> jda;
 
@@ -44,6 +47,7 @@ public class SpongeDiscordLib {
     public void onPreInit(GameConstructionEvent event) {
         new DiscordConfigManager(loader);
         jda = CompletableFuture.supplyAsync(this::initJDA);
+        instance = this;
     }
 
     private JDA initJDA() {
@@ -77,7 +81,9 @@ public class SpongeDiscordLib {
     private static boolean initTimeExceeded(){
         final long SECOND = 1000;
         final long MINUTE = SECOND * 60;
-        return startTime - System.currentTimeMillis() > 5 * MINUTE;
+        long duration = System.currentTimeMillis() - startTime;
+        instance.logger.info("JDA has taken " + duration + "ms to boot!");
+        return duration > 5 * MINUTE;
     }
 
     public static String getBotToken() {

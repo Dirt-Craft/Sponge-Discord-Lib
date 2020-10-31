@@ -45,6 +45,7 @@ public class SpongeDiscordLib {
 
     @Listener(order = Order.PRE)
     public void onPreInit(GameConstructionEvent event) {
+        logger.info("Initializing JDA!");
         new DiscordConfigManager(loader);
         jda = CompletableFuture.supplyAsync(this::initJDA);
         instance = this;

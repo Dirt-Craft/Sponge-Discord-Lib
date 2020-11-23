@@ -43,12 +43,18 @@ public class SpongeDiscordLib {
     private static long startTime = System.currentTimeMillis();
     private static CompletableFuture<JDA> jda;
 
+    private boolean initialized;
+
+    public SpongeDiscordLib(){
+        instance = this;
+    }
+
     @Listener(order = Order.PRE)
     public void onPreInit(GameConstructionEvent event) {
-        logger.info("Initializing JDA!");
+        if (initialized) return;
         new DiscordConfigManager(loader);
         jda = CompletableFuture.supplyAsync(this::initJDA);
-        instance = this;
+        initialized = true;
     }
 
     private JDA initJDA() {
@@ -97,6 +103,10 @@ public class SpongeDiscordLib {
 
     public static String getServerName() {
         return DiscordConfiguration.Discord.SERVER_NAME;
+    }
+
+    public static SpongeDiscordLib getInstance(){
+        return instance;
     }
 
 }

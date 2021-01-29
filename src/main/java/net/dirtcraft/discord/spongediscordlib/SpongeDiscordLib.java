@@ -10,16 +10,21 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
 @Plugin(
         id = "sponge-discord-lib",
@@ -33,56 +38,97 @@ import java.util.concurrent.CompletableFuture;
         }
 )
 public class SpongeDiscordLib {
-
-
-    @DefaultConfig(sharedRoot = true)
-    @Inject private ConfigurationLoader<CommentedConfigurationNode> loader;
-    @Inject private Logger logger;
-
     private static SpongeDiscordLib instance;
     private static long startTime = System.currentTimeMillis();
     private static CompletableFuture<JDA> jda;
 
-    private boolean initialized;
+    @Inject private Logger logger;
+
+    @DefaultConfig(sharedRoot = true)
+    @Inject private ConfigurationLoader<CommentedConfigurationNode> loader;
+    private Queue<Consumer<JDA>> onJdaInit = new ConcurrentLinkedQueue<>();
+    DiscordConfigManager configManager;
+    Collection<GatewayIntent> intents = Arrays.asList(
+            GatewayIntent.GUILD_MEMBERS,
+            GatewayIntent.GUILD_MESSAGES,
+            GatewayIntent.DIRECT_MESSAGES
+    );
 
     public SpongeDiscordLib(){
         instance = this;
     }
 
     @Listener(order = Order.PRE)
-    public void onPreInit(GameConstructionEvent event) {
-        if (initialized) return;
-        new DiscordConfigManager(loader);
+    public void onPreInit(GameConstructionEvent event){
+        if (jda == null) initialize();
+    }
+
+    private void initialize(){
+        configManager = new DiscordConfigManager(loader);
         jda = CompletableFuture.supplyAsync(this::initJDA);
-        initialized = true;
+        jda.thenAccept(this::executeCallbacks);
+        CommandSpec reload = CommandSpec.builder()
+                .permission("spongediscordlink.reload")
+                .executor((a,b)->{
+                    configManager.update();
+                    return CommandResult.success();
+                }).build();
+        CommandSpec main = CommandSpec.builder()
+                .child(reload, "reload", "r")
+                .build();
+        Sponge.getCommandManager().register(this, main, "discordlib");
     }
 
     private JDA initJDA() {
-        if (jda.getNow(null) != null) return jda.join();
-        JDA jda;
-        try {
-            Collection<GatewayIntent> intents = Arrays.asList(
-                    GatewayIntent.GUILD_MEMBERS,
-                    GatewayIntent.GUILD_MESSAGES,
-                    GatewayIntent.DIRECT_MESSAGES
-            );
-            jda = JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN, intents)
-                    .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .build();
-            return jda.awaitReady();
-        } catch (LoginException | InterruptedException e){
-            e.printStackTrace();
-            return null;
+        int i = 0;
+        while (true) {
+            try {
+                int loops = i++;
+                if (loops > 50) {
+                    Thread.sleep(150000);
+                    configManager.update();
+                } else if (loops > 0){
+                    Thread.sleep(30000);
+                    configManager.update();
+                }
+                if (jda.getNow(null) != null) return jda.join();
+                JDA jda =  JDABuilder.createDefault(DiscordConfiguration.Discord.TOKEN, intents)
+                            .setMemberCachePolicy(MemberCachePolicy.ALL)
+                            .build();
+                jda.awaitStatus(JDA.Status.CONNECTED, JDA.Status.FAILED_TO_LOGIN);
+                //noinspection ConstantConditions
+                if (jda != null) return jda;
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    private void executeCallbacks(JDA jda){
+        onJdaInit.forEach(consumer-> {
+            try{
+                consumer.accept(jda);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+    }
+
     public static JDA getJDA() {
+        if (jda == null) instance.initialize();
         while (!jda.isDone() && !initTimeExceeded()){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ignored) { }
         }
-        return jda.join();
+        return SpongeDiscordLib.jda.getNow(null);
+    }
+
+    public static void getJDA(Consumer<JDA> callback){
+        if (jda == null) instance.initialize();
+        JDA jda = SpongeDiscordLib.jda.getNow(null);
+        if (jda == null) instance.onJdaInit.add(callback);
+        else callback.accept(jda);
     }
 
     private static boolean initTimeExceeded(){

@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     shadow fileTree(dir: 'libraries', include: '*.jar')
-    shadow 'org.spongepowered:spongeapi:5.2.0-SNAPSHOT'
+    shadow 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
     compile ('net.dv8tion:JDA:4.2.0_214') {
         exclude module: 'opus-java'
     }

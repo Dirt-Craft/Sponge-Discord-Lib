@@ -19,7 +19,7 @@ public class DiscordConfigManager {
         update();
     }
 
-    private void update() {
+    public void update() {
         try {
             CommentedConfigurationNode node = loader.load(options);
             DiscordConfiguration cfg = node.getValue(TypeToken.of(DiscordConfiguration.class), new DiscordConfiguration());

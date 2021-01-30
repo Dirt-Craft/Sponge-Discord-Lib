@@ -9,7 +9,7 @@ configurations {
 }
 
 group = pluginGroup
-//version = pluginVersion - REMOVE THE VERSION FROM THE JAR NAME
+version = pluginVersion
 
 repositories {
     jcenter()
@@ -27,8 +27,13 @@ jar.enabled = true
 
 build.dependsOn shadowJar
 
+jar {
+    archiveName = "Sponge-Discord-Lib.jar"
+}
+
 shadowJar {
     classifier = null
+    archiveName  = "Sponge-Discord-Lib.jar"
     configurations = [project.configurations.compile]
 
     relocate('org.json', 'net.dirtcraft.org.shaded.json')
